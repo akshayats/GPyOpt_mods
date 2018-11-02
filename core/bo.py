@@ -154,12 +154,22 @@ class BO(object):
             self.cum_time = time.time() - self.time_zero
             self.num_acquisitions += 1
 
+
+            ##### HACK
+            print(self.X)
+            print(self.Y)
+            # self.plot_acquisition()
+            # plt.show()
+
             if verbosity:
                 print("num acquisition: {}, time elapsed: {:.2f}s".format(
                     self.num_acquisitions, self.cum_time))
 
         # --- Stop messages and execution time
         self._compute_results()
+
+        ##### HACK
+        self.plot_convergence()
 
         # --- Print the desired result in files
         if self.report_file is not None:
@@ -285,7 +295,7 @@ class BO(object):
                                 model_to_plot.model.X,
                                 model_to_plot.model.Y,
                                 self.acquisition.acquisition_function,
-                                self.suggest_next_locations(),
+                                self.suggest_next_locations(), # CHECK HERE TOMORROW!!!!!! -- see where acquisition function can be altered
                                 filename)
 
     def plot_convergence(self,filename=None):

@@ -35,8 +35,34 @@ class AcquisitionBase(object):
         Takes an acquisition and weights it so the domain and cost are taken into account.
         """
         f_acqu = self._compute_acq(x)
+        ##############AKSHAYA HACK###############
+        f_acqu_new   = []
+        for xx,yy in zip(x,f_acqu):
+            if xx >= 0.9 or xx <= 0.6:
+                f_acqu_new.append(yy)
+            else:
+                f_acqu_new.append(0)
+
+        import numpy as np
+        f_acqu_new   = np.array(f_acqu_new)
+        print('akshaya')
+        idxs   = x.flatten().argsort()
+        yplt   = f_acqu.flatten()[idxs]
+        xplt   = x.flatten()[idxs]
+        y_newplt   = f_acqu_new[idxs]
+
+        import matplotlib.pyplot as plt
+        plt.figure()
+        plt.plot(xplt, yplt)
+        plt.plot(xplt, y_newplt)
+
+        plt.show()
+        exit()
+
+
         cost_x, _ = self.cost_withGradients(x)
-        return -(f_acqu*self.space.indicator_constraints(x))/cost_x
+        # return -(f_acqu*self.space.indicator_constraints(x))/cost_x
+        return -(f_acqu_new*self.space.indicator_constraints(x))/cost_x
 
 
     def acquisition_function_withGradients(self, x):
