@@ -38,26 +38,27 @@ class AcquisitionBase(object):
         ##############AKSHAYA HACK###############
         f_acqu_new   = []
         for xx,yy in zip(x,f_acqu):
-            if xx >= 0.9 or xx <= 0.6:
+            if xx >= 0.9 or xx <= 0.5:
                 f_acqu_new.append(yy)
             else:
                 f_acqu_new.append(0)
 
         import numpy as np
-        f_acqu_new   = np.array(f_acqu_new)
-        print('akshaya')
-        idxs   = x.flatten().argsort()
-        yplt   = f_acqu.flatten()[idxs]
-        xplt   = x.flatten()[idxs]
-        y_newplt   = f_acqu_new[idxs]
+        f_acqu_new   = np.array(f_acqu_new)[:,np.newaxis]
+        # print('akshaya')
 
-        import matplotlib.pyplot as plt
-        plt.figure()
-        plt.plot(xplt, yplt)
-        plt.plot(xplt, y_newplt)
-
-        plt.show()
-        exit()
+        # idxs   = x.flatten().argsort()
+        # yplt   = f_acqu.flatten()[idxs]
+        # xplt   = x.flatten()[idxs]
+        # y_newplt   = f_acqu_new[idxs]
+        #
+        # import matplotlib.pyplot as plt
+        # plt.figure()
+        # plt.plot(xplt, yplt)
+        # plt.plot(xplt, y_newplt)
+        #
+        # plt.show()
+        # exit()
 
 
         cost_x, _ = self.cost_withGradients(x)
