@@ -34,19 +34,41 @@ class AcquisitionBase(object):
         """
         Takes an acquisition and weights it so the domain and cost are taken into account.
         """
-        f_acqu = self._compute_acq(x)
-        ##############AKSHAYA HACK###############
-        f_acqu_new   = []
-        for xx,yy in zip(x,f_acqu):
-            if xx >= 0.9 or xx <= 0.5:
-                f_acqu_new.append(yy)
-            else:
-                f_acqu_new.append(0)
-
+        import copy
         import numpy as np
-        f_acqu_new   = np.array(f_acqu_new)[:,np.newaxis]
+        import matplotlib.pyplot as plt
+        # Vanilla acquisition function
+        f_acqu       = self._compute_acq(x)
+        # Subject that to barriers
+        f_acqu_new   = copy.deepcopy(f_acqu)
+        #####TSA:: Check if there are barriers and then force values to low
+        if len(self.barriers):
+            print('Using barriers to barricade')
+            # Visit the barriers one by one
+            invalidities    = (f_acqu!=np.inf)
+            for b in self.barriers:
+                # Within all the barriers.
+                # Higher than down lim and lower than upper lim
+                invalidities   = invalidities &(f_acqu_new>b[0]) &(f_acqu_new<b[1])
+            # Force to low value
+            f_acqu_new[invalidities]   = 0
+
+        # Plotting for sanity check
+        # plt.figure()
+        # plt.plot(x.flatten()[plotorder], f_acqu_new.flatten()[plotorder] - 1)
+        plotorder    = x.flatten().argsort()
+        plt.figure()
+        plt.plot(x.flatten()[plotorder], f_acqu_new.flatten()[plotorder])
+        plt.show()
+
+                # if xx >= 0.9 or xx <= 0.5:
+                #     f_acqu_new.append(yy)
+                # else:
+                #     f_acqu_new.append(0)
+            # f_acqu_new = np.array(f_acqu_new)[:, np.newaxis]
+
         cost_x, _ = self.cost_withGradients(x)
-        # return -(f_acqu_new*self.space.indicator_constraints(x))/cost_x
+        return -(f_acqu_new*self.space.indicator_constraints(x))/cost_x
 
 
 
@@ -62,7 +84,7 @@ class AcquisitionBase(object):
         #
         # plt.show()
         # exit()
-        return -(f_acqu*self.space.indicator_constraints(x))/cost_x
+        # return -(f_acqu*self.space.indicator_constraints(x))/cost_x
 
 
     def acquisition_function_withGradients(self, x):

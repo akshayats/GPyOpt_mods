@@ -24,6 +24,8 @@ class AcquisitionEI(AcquisitionBase):
         self.optimizer = optimizer
         super(AcquisitionEI, self).__init__(model, space, optimizer, cost_withGradients=cost_withGradients)
         self.jitter = jitter
+        #####TSA:: New barrier list
+        self.barriers = []
 
     @staticmethod
     def fromConfig(model, space, optimizer, cost_withGradients, config):

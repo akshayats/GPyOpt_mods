@@ -159,6 +159,9 @@ class BO(object):
             xConsecDists   = self._find_avg_consecutive_dists()
             if xConsecDists < 0.05:
                 print(xConsecDists)
+                # if not len(self.acquisition.barriers):
+                self.acquisition.barriers.append((0.5, 0.9))
+                print(self.acquisition.barriers)
                 # print(self.X)
             # print(self.Y)
             # self.plot_acquisition()
