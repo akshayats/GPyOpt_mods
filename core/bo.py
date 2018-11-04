@@ -156,8 +156,11 @@ class BO(object):
 
 
             ##### HACK
-            print(self.X)
-            print(self.Y)
+            xConsecDists   = self._find_avg_consecutive_dists()
+            if xConsecDists < 0.05:
+                print(xConsecDists)
+                # print(self.X)
+            # print(self.Y)
             # self.plot_acquisition()
             # plt.show()
 
@@ -168,9 +171,6 @@ class BO(object):
         # --- Stop messages and execution time
         self._compute_results()
 
-        ##### HACK
-        self.plot_convergence()
-
         # --- Print the desired result in files
         if self.report_file is not None:
             self.save_report(self.report_file)
@@ -178,6 +178,16 @@ class BO(object):
             self.save_evaluations(self.evaluations_file)
         if self.models_file is not None:
             self.save_models(self.models_file)
+
+    #####TSA:: Aux function to compute deviation of consecutive samples
+    def _find_avg_consecutive_dists(self, history_len=5):
+        n = self.X.shape[0]
+        print(n)
+        aux = (self.X[1:n, :] - self.X[0:n - 1, :]) ** 2
+        distances = np.sqrt(aux.sum(axis=1))
+        # Average distance of deviation
+        avg_distance   = np.sum(distances[-history_len:])/history_len
+        return avg_distance
 
     def _print_convergence(self):
         """

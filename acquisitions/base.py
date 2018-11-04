@@ -45,7 +45,10 @@ class AcquisitionBase(object):
 
         import numpy as np
         f_acqu_new   = np.array(f_acqu_new)[:,np.newaxis]
-        # print('akshaya')
+        cost_x, _ = self.cost_withGradients(x)
+        # return -(f_acqu_new*self.space.indicator_constraints(x))/cost_x
+
+
 
         # idxs   = x.flatten().argsort()
         # yplt   = f_acqu.flatten()[idxs]
@@ -59,11 +62,7 @@ class AcquisitionBase(object):
         #
         # plt.show()
         # exit()
-
-
-        cost_x, _ = self.cost_withGradients(x)
-        # return -(f_acqu*self.space.indicator_constraints(x))/cost_x
-        return -(f_acqu_new*self.space.indicator_constraints(x))/cost_x
+        return -(f_acqu*self.space.indicator_constraints(x))/cost_x
 
 
     def acquisition_function_withGradients(self, x):

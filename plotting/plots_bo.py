@@ -60,7 +60,15 @@ def plot_acquisition(bounds,input_dim,model,Xdata,Ydata,acquisition_function,sug
         plt.plot(x_grid, m-1.96*np.sqrt(v), 'k-', alpha = 0.2)
         plt.plot(x_grid, m+1.96*np.sqrt(v), 'k-', alpha=0.2)
 
-        plt.plot(Xdata, Ydata, 'r.', markersize=10)
+        # hack to see colors in order
+        import seaborn as sns
+        # clrs   = sns.dark_palette("red", Xdata.shape[0]*2)# [Xdata.shape[0]:]
+        clrs   = sns.diverging_palette(255, 133, l=60, n=Xdata.shape[0], center="dark")
+        # sns.palplot(sns.cubehelix_palette(start=0.8, rot=.5))
+        plt.scatter(Xdata, Ydata, c=clrs)#'r.', markersize=10)
+
+
+        # plt.plot(Xdata, Ydata, 'r.', markersize=10)
         plt.axvline(x=suggested_sample[len(suggested_sample)-1],color='r')
         factor = max(m+1.96*np.sqrt(v))-min(m-1.96*np.sqrt(v))
 
@@ -75,7 +83,7 @@ def plot_acquisition(bounds,input_dim,model,Xdata,Ydata,acquisition_function,sug
         if filename!=None:
             savefig(filename)
         else:
-            plt.show()
+            plt.show(block=False)
 
     if input_dim ==2:
         X1 = np.linspace(bounds[0][0], bounds[0][1], 200)
