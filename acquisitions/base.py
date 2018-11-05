@@ -53,9 +53,17 @@ class AcquisitionBase(object):
 
             # Force to low value
             f_acqu_new[invalidities]   = 0
+            if len(f_acqu_new)==1:
+                print("Invalidated an optimum pick")
+
 
         # Plotting for sanity check
-        # plt.figure()
+        if len(x)>1:
+            # plt.figure()
+            Idxs    = x.flatten().argsort()
+            print(Idxs.shape)
+            print(f_acqu_new.flatten()[Idxs].shape)
+            print(x.flatten()[Idxs].shape)
         # plt.plot(x.flatten()[plotorder], f_acqu_new.flatten()[plotorder] - 1)
 
         # print(np.shape(x))
