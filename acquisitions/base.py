@@ -33,16 +33,23 @@ class AcquisitionBase(object):
     def acquisition_function(self,x):
         """
         Takes an acquisition and weights it so the domain and cost are taken into account.
+        The values of the acquistion function are originally positive. They are returned in
+        negative format to suit an optimizer. Observe that the plotting function plots the
+        normalized(-1* (acquisition function values))
         """
         import copy
         import numpy as np
         import matplotlib.pyplot as plt
         # Vanilla acquisition function
         f_acqu       = self._compute_acq(x)
+        # print(np.min(f_acqu))
+        # print(np.max(f_acqu))
+        # print('------------')
         # Subject that to barriers
         f_acqu_new   = copy.deepcopy(f_acqu)
         #####TSA:: Check if there are barriers and then force values to low
-        if len(self.barriers):
+        # if len(self.barriers):
+        if False:
             print('Using barriers to barricade')
             # Visit the barriers one by one
             invalidities    = (f_acqu!=np.inf)
@@ -52,18 +59,28 @@ class AcquisitionBase(object):
                 invalidities   = invalidities &(x>b[0]) &(x<b[1])
 
             # Force to low value
+            tmp    = f_acqu_new
             f_acqu_new[invalidities]   = 0
             if len(f_acqu_new)==1:
+                print(tmp)
+                print(f_acqu_new)
                 print("Invalidated an optimum pick")
 
 
         # Plotting for sanity check
         if len(x)>1:
             # plt.figure()
-            Idxs    = x.flatten().argsort()
-            print(Idxs.shape)
-            print(f_acqu_new.flatten()[Idxs].shape)
-            print(x.flatten()[Idxs].shape)
+            Idxs        = x.flatten().argsort()
+            plt_f_acq   = f_acqu_new.flatten()[Idxs]
+            plt_x       = x.flatten()[Idxs]
+            # print(Idxs.shape)
+            # print(plt_x.shape)
+            # print(plt_f_acq.shape)
+
+            # plt.figure()
+            # plt.plot(plt_x, plt_f_acq)
+            # plt.show()
+
         # plt.plot(x.flatten()[plotorder], f_acqu_new.flatten()[plotorder] - 1)
 
         # print(np.shape(x))
