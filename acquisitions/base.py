@@ -49,17 +49,22 @@ class AcquisitionBase(object):
             for b in self.barriers:
                 # Within all the barriers.
                 # Higher than down lim and lower than upper lim
-                invalidities   = invalidities &(f_acqu_new>b[0]) &(f_acqu_new<b[1])
+                invalidities   = invalidities &(x>b[0]) &(x<b[1])
+
             # Force to low value
             f_acqu_new[invalidities]   = 0
 
         # Plotting for sanity check
         # plt.figure()
         # plt.plot(x.flatten()[plotorder], f_acqu_new.flatten()[plotorder] - 1)
-        plotorder    = x.flatten().argsort()
-        plt.figure()
-        plt.plot(x.flatten()[plotorder], f_acqu_new.flatten()[plotorder])
-        plt.show()
+
+        # print(np.shape(x))
+        # print(np.shape(f_acqu_new))
+        #
+        # plotorder    = x.flatten().argsort()
+        # plt.figure()
+        # plt.plot(x.flatten()[plotorder], f_acqu_new.flatten()[plotorder])
+        # plt.show()
 
                 # if xx >= 0.9 or xx <= 0.5:
                 #     f_acqu_new.append(yy)
