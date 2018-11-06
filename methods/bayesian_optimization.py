@@ -119,6 +119,11 @@ class BayesianOptimization(BO):
         self.initial_design_numdata = initial_design_numdata
         self._init_design_chooser()
 
+        # --- ####TSA: Variables for multi optimum BO
+        import numpy as np
+        self.X_4converge = np.ones_like(self.X,dtype=bool)
+        self.history_len = 5
+
         # --- CHOOSE the model type. If an instance of a GPyOpt model is passed (possibly user defined), it is used.
         self.model_type = model_type
         self.exact_feval = exact_feval  # note that this 2 options are not used with the predefined model

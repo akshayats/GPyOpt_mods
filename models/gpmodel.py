@@ -43,6 +43,7 @@ class GPModel(BOModel):
 
         #####TSA:: New barrier list -- No go zones
         self.barriers = []
+        self.oracle   = [(0.6, 0.85), (0.13, 0.2)]
 
     @staticmethod
     def fromConfig(config):
