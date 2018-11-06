@@ -41,15 +41,16 @@ class AcquisitionBase(object):
         import numpy as np
         import matplotlib.pyplot as plt
         # Vanilla acquisition function
-        f_acqu       = self._compute_acq(x)
+        # f_acqu       = self._compute_acq(x)
+        f_acqu       = self._compute_acq_outsideBarriers(x)
         # print(np.min(f_acqu))
         # print(np.max(f_acqu))
         # print('------------')
         # Subject that to barriers
         f_acqu_new   = copy.deepcopy(f_acqu)
         #####TSA:: Check if there are barriers and then force values to low
-        # if len(self.barriers):
-        if False:
+        if len(self.model.barriers):
+        # if False:
             print('Using barriers to barricade')
             # Visit the barriers one by one
             invalidities    = (f_acqu!=np.inf)
@@ -62,8 +63,9 @@ class AcquisitionBase(object):
             tmp    = f_acqu_new
             f_acqu_new[invalidities]   = 0
             if len(f_acqu_new)==1:
-                print(tmp)
-                print(f_acqu_new)
+                # print(x)
+                # print(tmp)
+                # print(f_acqu_new)
                 print("Invalidated an optimum pick")
 
 
@@ -77,8 +79,8 @@ class AcquisitionBase(object):
             # print(plt_x.shape)
             # print(plt_f_acq.shape)
 
-            # plt.figure()
-            # plt.plot(plt_x, plt_f_acq)
+            plt.figure()
+            plt.plot(plt_x, plt_f_acq)
             # plt.show()
 
         # plt.plot(x.flatten()[plotorder], f_acqu_new.flatten()[plotorder] - 1)

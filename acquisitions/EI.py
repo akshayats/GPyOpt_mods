@@ -24,8 +24,6 @@ class AcquisitionEI(AcquisitionBase):
         self.optimizer = optimizer
         super(AcquisitionEI, self).__init__(model, space, optimizer, cost_withGradients=cost_withGradients)
         self.jitter = jitter
-        #####TSA:: New barrier list
-        self.barriers = []
 
     @staticmethod
     def fromConfig(model, space, optimizer, cost_withGradients, config):
@@ -40,6 +38,17 @@ class AcquisitionEI(AcquisitionBase):
         phi, Phi, u = get_quantiles(self.jitter, fmin, m, s)
         f_acqu = s * (u * Phi + phi)
         return f_acqu
+
+    def _compute_acq_outsideBarriers(self, x):
+        """
+        Computes the Expected Improvement per unit of cost
+        """
+        m, s = self.model.predict(x)
+        fmin = self.model.get_fmin_outsideBarriers()
+        phi, Phi, u = get_quantiles(self.jitter, fmin, m, s)
+        f_acqu = s * (u * Phi + phi)
+        return f_acqu
+
 
     def _compute_acq_withGradients(self, x):
         """

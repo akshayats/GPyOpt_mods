@@ -41,6 +41,9 @@ class GPModel(BOModel):
         self.model = None
         self.ARD = ARD
 
+        #####TSA:: New barrier list -- No go zones
+        self.barriers = []
+
     @staticmethod
     def fromConfig(config):
         return GPModel(**config)
@@ -121,6 +124,13 @@ class GPModel(BOModel):
         return v
 
     def get_fmin(self):
+        """
+        Returns the location where the posterior mean is takes its minimal value.
+        """
+        return self.model.predict(self.model.X)[0].min()
+
+
+    def get_fmin_outsideBarriers(self):
         """
         Returns the location where the posterior mean is takes its minimal value.
         """

@@ -66,9 +66,11 @@ class AcquisitionOptimizer(object):
             anchor_points_generator = ThompsonSamplingAnchorPointsGenerator(self.space, sobol_design_type, self.model)
 
         ## -- Select the anchor points (with context)
+        print('Generating anchor points...')
         anchor_points = anchor_points_generator.get(duplicate_manager=duplicate_manager, context_manager=self.context_manager)
 
         ## --- Applying local optimizers at the anchor points and update bounds of the optimizer (according to the context)
+        print('Generating next best point...')
         optimized_points = [apply_optimizer(self.optimizer, a, f=f, df=None, f_df=f_df, duplicate_manager=duplicate_manager, context_manager=self.context_manager, space = self.space) for a in anchor_points]
         x_min, fx_min = min(optimized_points, key=lambda t:t[1])
 

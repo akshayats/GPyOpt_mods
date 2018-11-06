@@ -50,9 +50,18 @@ def plot_acquisition(bounds,input_dim,model,Xdata,Ydata,acquisition_function,sug
         x_grid = np.arange(bounds[0][0], bounds[0][1], 0.001)
         x_grid = x_grid.reshape(len(x_grid),1)
         acqu = acquisition_function(x_grid)
-        acqu_normalized = (-acqu - min(-acqu))/(max(-acqu - min(-acqu)))
+        acqu_normalized = (-acqu - min(-acqu))#/(max(-acqu - min(-acqu)))
         m, v = model.predict(x_grid)
 
+        # print(np.min(acqu))
+        # print(np.max(acqu_normalized))
+        #
+        # plt.figure()
+        # plt.plot(m)
+        # plt.plot(v+m)
+        # plt.show()
+        # exit()
+        #
 
         model.plot_density(bounds[0], alpha=.5)
 
@@ -60,7 +69,7 @@ def plot_acquisition(bounds,input_dim,model,Xdata,Ydata,acquisition_function,sug
         plt.plot(x_grid, m-1.96*np.sqrt(v), 'k-', alpha = 0.2)
         plt.plot(x_grid, m+1.96*np.sqrt(v), 'k-', alpha=0.2)
 
-        # hack to see colors in order
+        #### HACK to see colors in order
         import seaborn as sns
         # clrs   = sns.dark_palette("red", Xdata.shape[0]*2)# [Xdata.shape[0]:]
         clrs   = sns.diverging_palette(255, 133, l=60, n=Xdata.shape[0], center="dark")
