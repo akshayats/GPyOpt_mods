@@ -132,18 +132,24 @@ class GPModel(BOModel):
 
     def get_fmin_outsideBarriers(self):
         """
+        Used instead of get_fmin(self)
+
         Returns the location where the posterior mean is takes its minimal value.
+        It also considers all the barriers provided to the model to record
+        the current minimum that is in pursuit.
+        Previous global minimum is ignored.
         """
         from copy import deepcopy
-        if len(self.barriers):
-            print('-----')
-            print('GPMOdel::barriers are:')
-            print(self.barriers)
-        # f_max_predicted    = self.model.predict(self.model.X)[0].max()
+        # if len(self.barriers):
+            # print('-----')
+            # print('GPMOdel::barriers are:')
+            # print(self.barriers)
+        # Predict values for all X
+        # Then filter out values for barriered regions
         f_predicted              = self.model.predict(self.model.X)[0]
         # Go through barriers and eliminate X's
         f_predicted_barriered    = deepcopy(f_predicted)
-        # Visit the barriers one by one
+        # Visit the barriers one by one to build a filtering index array
         invalids    = (f_predicted==np.inf) # init: None are invalid = All are valid
         for b in self.barriers:
             # Within any of the barriers is invalid (Logic OR)
@@ -155,20 +161,11 @@ class GPModel(BOModel):
         f_predicted_barriered   = f_predicted_barriered[valids,:]
         # Consider minimum out of those still valid.
         f_min_predicted         = f_predicted_barriered.min()
-        # print(len(f_predicted))
-        # print('filtered')
-        # print(len(f_min_predicted))
-
-
-
-
-
-        tmp    = self.model.predict(self.model.X)[0].min()
-        print(self.model.X)
-        print(valids)
-        print(f_min_predicted, tmp)
-        print('-----')
-
+        # tmp    = self.model.predict(self.model.X)[0].min()
+        # print(self.model.X)
+        # print(valids)
+        # print(f_min_predicted, tmp)
+        # print('-----')
         return f_min_predicted
 
     def predict_withGradients(self, X):

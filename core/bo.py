@@ -168,21 +168,7 @@ class BO(object):
                 # print('----------')
                 # print(self.Y)
                 # print('----------')
-                # exit()
 
-
-                # clear what is the best x, y
-
-                # Find every X in the barrier
-
-                # Look for new best x and y in the new bounds
-                # Do not throw away the history of observed points
-                # Just do not go back to where you found first optimum
-
-
-
-                # print(self.X)
-            # print(self.Y)
             # self.plot_acquisition()
             # plt.show()
 

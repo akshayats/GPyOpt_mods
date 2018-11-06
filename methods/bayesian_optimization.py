@@ -158,6 +158,20 @@ class BayesianOptimization(BO):
         self.evaluator_type = evaluator_type
         self.evaluator = self._evaluator_chooser()
 
+        # --- NUMBER of optima
+        if 'num_of_optima' in self.kwargs:
+            if isinstance(kwargs['num_of_optima'],int):
+                if kwargs['num_of_optima']>0 and kwargs['num_of_optima']<=10:
+                    self.N_opt   = kwargs['num_of_optima']
+                elif kwargs['num_of_optima']>10:
+                    warnings.warn('TSA:: Too many optima, switching back to default!')
+                    self.N_opt   = 1
+                else:
+                    pass
+            else:
+                warnings.warn('TSA:: Bad number_of_optima, switching to default value')
+                self.N_opt   = 1
+
         # --- Create optimization space
         super(BayesianOptimization,self).__init__(  model                  = self.model,
                                                     space                  = self.space,

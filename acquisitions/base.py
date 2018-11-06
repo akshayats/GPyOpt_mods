@@ -67,54 +67,17 @@ class AcquisitionBase(object):
                 # print(f_acqu_new)
                 print("Invalidated an optimum pick")
 
-
         # Plotting for sanity check
         if len(x)>1:
             # plt.figure()
             Idxs        = x.flatten().argsort()
             plt_f_acq   = f_acqu_new.flatten()[Idxs]
             plt_x       = x.flatten()[Idxs]
-            # print(Idxs.shape)
-            # print(plt_x.shape)
-            # print(plt_f_acq.shape)
-
             plt.figure()
             plt.plot(plt_x, plt_f_acq)
             # plt.show()
-
-        # plt.plot(x.flatten()[plotorder], f_acqu_new.flatten()[plotorder] - 1)
-
-        # print(np.shape(x))
-        # print(np.shape(f_acqu_new))
-        #
-        # plotorder    = x.flatten().argsort()
-        # plt.figure()
-        # plt.plot(x.flatten()[plotorder], f_acqu_new.flatten()[plotorder])
-        # plt.show()
-
-                # if xx >= 0.9 or xx <= 0.5:
-                #     f_acqu_new.append(yy)
-                # else:
-                #     f_acqu_new.append(0)
-            # f_acqu_new = np.array(f_acqu_new)[:, np.newaxis]
-
         cost_x, _ = self.cost_withGradients(x)
         return -(f_acqu_new*self.space.indicator_constraints(x))/cost_x
-
-
-
-        # idxs   = x.flatten().argsort()
-        # yplt   = f_acqu.flatten()[idxs]
-        # xplt   = x.flatten()[idxs]
-        # y_newplt   = f_acqu_new[idxs]
-        #
-        # import matplotlib.pyplot as plt
-        # plt.figure()
-        # plt.plot(xplt, yplt)
-        # plt.plot(xplt, y_newplt)
-        #
-        # plt.show()
-        # exit()
         # return -(f_acqu*self.space.indicator_constraints(x))/cost_x
 
 
