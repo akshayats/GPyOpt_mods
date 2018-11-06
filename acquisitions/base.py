@@ -42,10 +42,9 @@ class AcquisitionBase(object):
         import matplotlib.pyplot as plt
         # Vanilla acquisition function
         # f_acqu       = self._compute_acq(x)
+
+        # Acquisition function excluding barrier regions
         f_acqu       = self._compute_acq_outsideBarriers(x)
-        # print(np.min(f_acqu))
-        # print(np.max(f_acqu))
-        # print('------------')
         # Subject that to barriers
         f_acqu_new   = copy.deepcopy(f_acqu)
         #####TSA:: Check if there are barriers and then force values to low
@@ -54,7 +53,7 @@ class AcquisitionBase(object):
             print('Using barriers to barricade')
             # Visit the barriers one by one
             invalidities    = (f_acqu!=np.inf)
-            for b in self.barriers:
+            for b in self.model.barriers:
                 # Within all the barriers.
                 # Higher than down lim and lower than upper lim
                 invalidities   = invalidities &(x>b[0]) &(x<b[1])

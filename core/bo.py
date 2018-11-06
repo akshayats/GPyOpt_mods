@@ -144,7 +144,6 @@ class BO(object):
 
             self.suggested_sample = self._compute_next_evaluations()
             print('_compute_next_evaluations')
-            print(self.suggested_sample)
 
             # --- Augment X
             self.X = np.vstack((self.X,self.suggested_sample))
@@ -156,8 +155,7 @@ class BO(object):
             self.cum_time = time.time() - self.time_zero
             self.num_acquisitions += 1
 
-
-            ##### HACK
+            ##### TSA:: Found an optima
             xConsecDists   = self._find_avg_consecutive_dists()
             if xConsecDists < 0.05:
                 print(xConsecDists)
@@ -165,12 +163,12 @@ class BO(object):
                 self.model.barriers.append((0.5, 0.9))
                 # print(self.acquisition.barriers)
 
-                print('----------')
-                print(self.X)
-                print('----------')
-                print(self.Y)
-                print('----------')
-                exit()
+                # print('----------')
+                # print(self.X)
+                # print('----------')
+                # print(self.Y)
+                # print('----------')
+                # exit()
 
 
                 # clear what is the best x, y

@@ -134,7 +134,42 @@ class GPModel(BOModel):
         """
         Returns the location where the posterior mean is takes its minimal value.
         """
-        return self.model.predict(self.model.X)[0].min()
+        from copy import deepcopy
+        if len(self.barriers):
+            print('-----')
+            print('GPMOdel::barriers are:')
+            print(self.barriers)
+        # f_max_predicted    = self.model.predict(self.model.X)[0].max()
+        f_predicted              = self.model.predict(self.model.X)[0]
+        # Go through barriers and eliminate X's
+        f_predicted_barriered    = deepcopy(f_predicted)
+        # Visit the barriers one by one
+        invalids    = (f_predicted==np.inf) # init: None are invalid = All are valid
+        for b in self.barriers:
+            # Within any of the barriers is invalid (Logic OR)
+            # Higher than down lim and lower than upper lim (Logic AND)
+            invalids   = invalids |((self.model.X>b[0]) &(self.model.X<b[1]))
+
+        # Consider only valid f
+        valids                  = ~invalids.flatten()
+        f_predicted_barriered   = f_predicted_barriered[valids,:]
+        # Consider minimum out of those still valid.
+        f_min_predicted         = f_predicted_barriered.min()
+        # print(len(f_predicted))
+        # print('filtered')
+        # print(len(f_min_predicted))
+
+
+
+
+
+        tmp    = self.model.predict(self.model.X)[0].min()
+        print(self.model.X)
+        print(valids)
+        print(f_min_predicted, tmp)
+        print('-----')
+
+        return f_min_predicted
 
     def predict_withGradients(self, X):
         """
