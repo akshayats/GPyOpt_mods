@@ -143,13 +143,14 @@ class BO(object):
                 break
 
             self.suggested_sample = self._compute_next_evaluations()
-            print('_compute_next_evaluations')
+            print('_compute_next_evaluations done! <bo.py>')
 
             # --- Augment X Augment indicators for mid convergences
             self.X = np.vstack((self.X,self.suggested_sample))
             self.X_4converge = np.vstack((self.X_4converge,True))
             print(len(self.X))
             print(len(self.X_4converge))
+            print('<bo.py>')
 
             # self.X_4converge = np.vstack((self.X_4converge,self.suggested_sample))
             # print(self.X_4converge)
@@ -161,7 +162,7 @@ class BO(object):
             self.cum_time = time.time() - self.time_zero
             self.num_acquisitions += 1
 
-            ##### TSA:: Found an optima
+            ##### TSA:: Found an optima, now barricade it
             xConsecDists   = self._find_avg_consecutive_dists(history_len=self.history_len)
             if xConsecDists < 0.05: # CONSIDER using a scaled value of self.eps. Maybe another parameter on its own
                 print(xConsecDists)
@@ -181,7 +182,10 @@ class BO(object):
                 # for convergence checking for next optimum
                 # cutIdxs   = np.ones(len(self.X_4converge),dtype=bool)
                 # cutIdxs[-self.history_len:-1]   = False
+                print('Karaboudjan')
+                print(self.X_4converge)
                 self.X_4converge[-self.history_len:-1, :]   = False
+                print(self.X_4converge)
                 # print(self.X_4converge)
                 # print(np.hstack((self.X,cutIdxs.astype(bool))))
                 # print(self.X_4converge)

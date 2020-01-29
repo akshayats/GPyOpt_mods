@@ -163,7 +163,7 @@ class BayesianOptimization(BO):
         self.evaluator_type = evaluator_type
         self.evaluator = self._evaluator_chooser()
 
-        # --- NUMBER of optima
+        # --- NUMBER of optima # TSA???? possibly
         if 'num_of_optima' in self.kwargs:
             if isinstance(kwargs['num_of_optima'],int):
                 if kwargs['num_of_optima']>0 and kwargs['num_of_optima']<=10:
