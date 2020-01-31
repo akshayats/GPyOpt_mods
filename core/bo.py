@@ -148,9 +148,9 @@ class BO(object):
             # --- Augment X Augment indicators for mid convergences
             self.X = np.vstack((self.X,self.suggested_sample))
             self.X_4converge = np.vstack((self.X_4converge,True))
-            print(len(self.X))
-            print(len(self.X_4converge))
-            print('<bo.py>')
+            # print(len(self.X))
+            # print(len(self.X_4converge))
+            # print('<bo.py>')
 
             # self.X_4converge = np.vstack((self.X_4converge,self.suggested_sample))
             # print(self.X_4converge)
@@ -165,10 +165,11 @@ class BO(object):
             ##### TSA:: Found an optima, now barricade it
             xConsecDists   = self._find_avg_consecutive_dists(history_len=self.history_len)
             if xConsecDists < 0.05: # CONSIDER using a scaled value of self.eps. Maybe another parameter on its own
-                print(xConsecDists)
+                # print(xConsecDists)
                 # if not len(self.acquisition.barriers):
                 curr_barrier   = self.model.oracle.pop(0)
                 self.model.barriers.append(curr_barrier)
+                # print(self.model.barriers)
 
 
 
@@ -182,10 +183,9 @@ class BO(object):
                 # for convergence checking for next optimum
                 # cutIdxs   = np.ones(len(self.X_4converge),dtype=bool)
                 # cutIdxs[-self.history_len:-1]   = False
-                print('Karaboudjan')
-                print(self.X_4converge)
+
                 self.X_4converge[-self.history_len:-1, :]   = False
-                print(self.X_4converge)
+
                 # print(self.X_4converge)
                 # print(np.hstack((self.X,cutIdxs.astype(bool))))
                 # print(self.X_4converge)
@@ -222,8 +222,9 @@ class BO(object):
         if n < 2: # less than 2 evaluations
             return np.inf
         useIdxs   = self.X_4converge.flatten()
-        aux = (self.X[useIdxs][1:n, :] - self.X[useIdxs][0:n - 1, :]) ** 2
+        aux = (self.X[useIdxs][1:, :] - self.X[useIdxs][0:-1, :]) ** 2
         distances = np.sqrt(aux.sum(axis=1))
+
         # Average distance of deviation
         avg_distance   = np.sum(distances[-history_len:])/history_len
         return avg_distance
