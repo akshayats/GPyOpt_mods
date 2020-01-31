@@ -163,6 +163,13 @@ class BO(object):
             self.num_acquisitions += 1
 
             ##### TSA:: Found an optima, now barricade it
+
+            # Keep a count for number of optima reached.
+            # Use it in the conditions.
+
+
+
+
             xConsecDists   = self._find_avg_consecutive_dists(history_len=self.history_len)
             if xConsecDists < 0.05: # CONSIDER using a scaled value of self.eps. Maybe another parameter on its own
                 # print(xConsecDists)
